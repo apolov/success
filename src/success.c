@@ -1,9 +1,10 @@
 #include <pebble.h>
 
-#define KEY_QUESTION = 0,
-#define KEY_OP1 = 1,
-#define KEY_OP2 = 2,
-#define KEY_OP3 = 3,
+#define KEY_QUESTION = 0
+#define KEY_OP1 = 1
+#define KEY_OP2 = 2
+#define KEY_OP3 = 3
+#define OUTPUT 15
 #define APP_TITLE_HEIGHT 16
 //Keys for all the lines
 #define TOTAL_LINES 4
@@ -50,7 +51,6 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
  */
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
-  //Output?
   Tuple *tuple = dict_find(iter, OUTPUT);
   if(tuple) 
   {
@@ -58,24 +58,22 @@ void in_received_handler(DictionaryIterator *iter, void *context)
   }
 
   //New FSM state?
-  tuple = dict_find(iter, STATE);
+  /*tuple = dict_find(iter, STATE);
   if(tuple)
   {
     set_fsm_state(tuple->value->int32);
-  }
+  }*/
 
   //Line info?
-  for(int i = 0; i < TOTAL_LINES; i++)
+  /*for(int i = 0; i < TOTAL_LINES; i++)
   {
     tuple = dict_find(iter, i);
     if(tuple)
     {
       strcpy(line_status[i], tuple->value->cstring);
     }
-  }
-
+  }*/
 }
-
 /*
  * In dropped handler
  */
@@ -93,19 +91,6 @@ void in_dropped_handler(AppMessageResult reason, void *context)
  * Draw a MenuLayer row
  */
 
-
-void process_tuple(Tuple *t)
-{
-  //Get key
-  int key = t->key;
-
-  //Get integer value, if present
-  int value = t->value->int32;
-
-  //Get string value, if present
-  char string_value[32];
-  strcpy(string_value, t->value->cstring);
-
 void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
   {
   switch (cell_index->row) 
@@ -117,16 +102,16 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     menu_cell_basic_draw(ctx, cell_layer, "option 2", op2_buffer, NULL);
     break;
   case KEY_OP3:
-    menu_cell_basic_draw(ctx, cell_layer, "option 3", OP3, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "option 3", op3_buffer, NULL);
     break;
   default:
       menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
     break;
     } 
   }
-}
 
-static void in_received_handler(DictionaryIterator *iter, void *context) 
+
+/*static void in_received_handler(DictionaryIterator *iter, void *context) 
 {
   (void) context;
   
@@ -146,7 +131,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context)
       process_tuple(t);
     }
   }
-}
+}*/
 
 void send_int(uint8_t key, uint8_t cmd)
 {
