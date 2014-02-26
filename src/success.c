@@ -1,9 +1,9 @@
 #include <pebble.h>
 
-#define KEY_QUESTION = 0
-#define KEY_OP1 = 1
-#define KEY_OP2 = 2
-#define KEY_OP3 = 3
+#define KEY_QUESTION  0
+#define KEY_OP1 1
+#define KEY_OP2 2
+#define KEY_OP3 3
 #define OUTPUT 15
 #define APP_TITLE_HEIGHT 16
 //Keys for all the lines
@@ -14,7 +14,7 @@ static Window *window;
 static TextLayer *outputLayer;
 static MenuLayer *menuLayer;
 //static PropertyAnimation *trainAnimation;
-static int current_state;
+//static int current_state;
 static char line_status[TOTAL_LINES][32];
 char question_buffer[64], op1_buffer[32], op2_buffer[32], op3_buffer[32];
 
@@ -33,7 +33,9 @@ void interpret_message_result(AppMessageResult app_message_error);
 /****************************** App Message callbacks ***************************************/
 
 void out_sent_handler(DictionaryIterator *sent, void *context) 
-{}
+{
+
+}
 
 /*
  * Out failed handler
@@ -314,7 +316,7 @@ void remove_all_layers()
   layer_remove_from_parent((Layer*) outputLayer);
 
   //Remove image
-  layer_remove_from_parent((Layer*) backLayer);
+  //layer_remove_from_parent((Layer*) backLayer);
 
   //Remove menu layer
   layer_remove_from_parent((Layer*) menuLayer);
