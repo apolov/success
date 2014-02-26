@@ -1,49 +1,21 @@
 #include <pebble.h>
 
+#define KEY_QUESTION = 0,
+#define KEY_OP1 = 1,
+#define KEY_OP2 = 2,
+#define KEY_OP3 = 3,
 #define APP_TITLE_HEIGHT 16
-
 //Keys for all the lines
-/*#define BAKERLOO 0
-#define CENTRAL 1
-#define CIRCLE 2
-#define DISTRICT 3  
-#define DLR 12
-#define HSMITHCITY 4
-#define JUBILEE 5
-#define METROPOLITAN 6  
-#define NORTHERN 7
-#define OVERGROUND 11 
-#define PICADILLY 8
-#define VICTORIA 9
-#define WATERLOOCITY 10*/
-  
 #define TOTAL_LINES 4
-
-//Keys for app events
-#define PING 13
-#define REQUEST_DATA 14
-#define OUTPUT 15
-#define STATE 16
-
-//FSM states
-#define STATE_WAITING 30
-#define STATE_UPDATING 31
-#define STATE_SHOWING 32
-#define STATE_ERROR 33
-#define STATE_INIT 34
 
 //Global structures
 static Window *window;
 static TextLayer *outputLayer;
-//static BitmapLayer *backLayer, *trainLayer;
-//static GBitmap *back, *train;
 static MenuLayer *menuLayer;
 //static PropertyAnimation *trainAnimation;
 static int current_state;
 static char line_status[TOTAL_LINES][32];
 char question_buffer[64], op1_buffer[32], op2_buffer[32], op3_buffer[32];
-
-
 
 //Prototypes
 void applog(char* message);
@@ -120,12 +92,7 @@ void in_dropped_handler(AppMessageResult reason, void *context)
 /*
  * Draw a MenuLayer row
  */
- enum {
-  KEY_QUESTION = 0,
-  KEY_OP1 = 1,
-  KEY_OP2 = 2,
-  KEY_OP3 = 3,
-};
+
 
 void process_tuple(Tuple *t)
 {
@@ -140,22 +107,23 @@ void process_tuple(Tuple *t)
   strcpy(string_value, t->value->cstring);
 
 void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
-{
-  switch (key) 
   {
-  case OP1:
-    menu_cell_basic_draw(ctx, cell_layer, "option 1", op1, NULL);
+  switch (cell_index->row) 
+    {
+  case KEY_OP1:
+    menu_cell_basic_draw(ctx, cell_layer, "option 1", op1_buffer, NULL);
     break;
-  case OP2:
-    menu_cell_basic_draw(ctx, cell_layer, "option 2", OP2, NULL);
+  case KEY_OP2:
+    menu_cell_basic_draw(ctx, cell_layer, "option 2", op2_buffer, NULL);
     break;
-  case OP3:
+  case KEY_OP3:
     menu_cell_basic_draw(ctx, cell_layer, "option 3", OP3, NULL);
     break;
   default:
       menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
     break;
-  } 
+    } 
+  }
 }
 
 static void in_received_handler(DictionaryIterator *iter, void *context) 
@@ -290,9 +258,6 @@ static void init(void)
 
   //Show
   window_stack_push(window, true);
-
-  //Set FSM initian state
-  set_fsm_state(STATE_INIT);
 }
 
 static void deinit(void) 
@@ -313,18 +278,18 @@ int main(void)
 /*
  * Convenience to log a message without respect to the level or line number
  */
-void applog(char* message)
-{
-  app_log(APP_LOG_LEVEL_INFO, "main.c", 0, message);
-}
+// void applog(char* message)
+// {
+//   app_log(APP_LOG_LEVEL_INFO, "main.c", 0, message);
+// }
 
-/*
- * Convenience marker for debugging function progress
- */
-void breakpoint()
-{
-  app_log(APP_LOG_LEVEL_DEBUG, "main.c", 0, "BREAKPOINT");
-}
+
+//  * Convenience marker for debugging function progress
+ 
+// void breakpoint()
+// {
+//   app_log(APP_LOG_LEVEL_DEBUG, "main.c", 0, "BREAKPOINT");
+// }
 
 /*
  * Send an integer
@@ -343,7 +308,7 @@ void breakpoint()
 /*
  * Ronseal Wood Varnish
  */
-*void setup_app_message()
+void setup_app_message()
 {
   app_message_register_inbox_received(in_received_handler);
   app_message_register_inbox_dropped(in_dropped_handler);
@@ -373,207 +338,124 @@ void remove_all_layers()
 /*
  * Set the FSM state for the layout
  */
-void set_fsm_state(int new_state)
-{
-  //Report state in console
-  char *temp = malloc(sizeof("PEBBLE: state: 00"));
-  snprintf(temp, sizeof("PEBBLE: state: 00"), "PEBBLE: state: %d", new_state);
-  applog(temp);
+// void set_fsm_state(int new_state)
+// {
+//   //Report state in console
+//   char *temp = malloc(sizeof("PEBBLE: state: 00"));
+//   snprintf(temp, sizeof("PEBBLE: state: 00"), "PEBBLE: state: %d", new_state);
+//   applog(temp);
 
   //Remember state
-  current_state = new_state;
+//   current_state = new_state;
 
-  //Apply the new state
-  switch(new_state)
-  {
-  //Initial state - waiting for JS
-  case STATE_INIT:
-    set_image(backLayer, back, GRect(0, 0, 144, 144));
-    layer_add_child(window_get_root_layer(window), (Layer*) outputLayer);
-    text_layer_set_text(outputLayer, "Waiting for PebbleJS...");
+//   //Apply the new state
+//   switch(new_state)
+//   {
+//   //Initial state - waiting for JS
+//   case STATE_INIT:
+//     set_image(backLayer, back, GRect(0, 0, 144, 144));
+//     layer_add_child(window_get_root_layer(window), (Layer*) outputLayer);
+//     text_layer_set_text(outputLayer, "Waiting for PebbleJS...");
 
-    //Animate train
-    set_image(trainLayer, train, GRect(144, 49, 154, 34));
-    animateLayer(trainAnimation, (Layer*) bitmap_layer_get_layer(trainLayer), GRect(144, 49, 154, 34), GRect(-154, 49, 154, 34), 5000, 0);
-    break;
-  //Waiting for JS confirm
-  case STATE_WAITING:
-    text_layer_set_text(outputLayer, "Waiting for PebbleJS...");
-    send_int(REQUEST_DATA, 0);
-    break;
-  //Waiting for fresh data
-  case STATE_UPDATING:
-    text_layer_set_text(outputLayer, "Downloading data...");
-    break;
-  //Data obtained, show menu of new data
-  case STATE_SHOWING:
-    //Remove text layers
-    layer_remove_from_parent((Layer*) outputLayer);
+//     //Animate train
+//     set_image(trainLayer, train, GRect(144, 49, 154, 34));
+//     animateLayer(trainAnimation, (Layer*) bitmap_layer_get_layer(trainLayer), GRect(144, 49, 154, 34), GRect(-154, 49, 154, 34), 5000, 0);
+//     break;
+//   //Waiting for JS confirm
+//   case STATE_WAITING:
+//     text_layer_set_text(outputLayer, "Waiting for PebbleJS...");
+//     send_int(REQUEST_DATA, 0);
+//     break;
+//   //Waiting for fresh data
+//   case STATE_UPDATING:
+//     text_layer_set_text(outputLayer, "Downloading data...");
+//     break;
+//   //Data obtained, show menu of new data
+//   case STATE_SHOWING:
+//     //Remove text layers
+//     layer_remove_from_parent((Layer*) outputLayer);
 
-    //Remove images
-    layer_remove_from_parent((Layer*) backLayer);
-    layer_remove_from_parent((Layer*) trainLayer);
+//     //Remove images
+//     layer_remove_from_parent((Layer*) backLayer);
+//     layer_remove_from_parent((Layer*) trainLayer);
 
-    //Remove any animation
-    destroy_property_animation(trainAnimation);
+//     //Remove any animation
+//     destroy_property_animation(trainAnimation);
 
-    //Prepare window
-    window_set_background_color(window, GColorWhite);
+//     //Prepare window
+//     window_set_background_color(window, GColorWhite);
 
-    //Setup menu layer
-    menu_layer_set_click_config_onto_window(menuLayer, window);
-    menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
-      .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
-      .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
-      .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
-    });
+//     //Setup menu layer
+//     menu_layer_set_click_config_onto_window(menuLayer, window);
+//     menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
+//       .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
+//       .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
+//       .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
+//     });
 
-    layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
-    vibes_short_pulse();
-    break;
-  //Some error state - unused
-  case STATE_ERROR:
-    set_image(backLayer, back, GRect(0, 0, 144, 144));
-    layer_add_child(window_get_root_layer(window), (Layer*) outputLayer);
-    text_layer_set_text(outputLayer, "Error updating!");
-    break;
-  }
-}
+//     layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
+//     vibes_short_pulse();
+//     break;
+//   //Some error state - unused
+//   case STATE_ERROR:
+//     set_image(backLayer, back, GRect(0, 0, 144, 144));
+//     layer_add_child(window_get_root_layer(window), (Layer*) outputLayer);
+//     text_layer_set_text(outputLayer, "Error updating!");
+//     break;
+//   }
+// }
 
 /*
  * Set an image in a bitmap layer
  */
-void set_image(BitmapLayer *layer, GBitmap *bitmap, GRect frame) {
-  //Deinit old
-  layer_remove_from_parent((Layer*) layer);
-  bitmap_layer_destroy(layer);
+// void set_image(BitmapLayer *layer, GBitmap *bitmap, GRect frame) {
+//   //Deinit old
+//   layer_remove_from_parent((Layer*) layer);
+//   bitmap_layer_destroy(layer);
  
-  //Init new
-  layer = bitmap_layer_create(frame);
+//   //Init new
+//   layer = bitmap_layer_create(frame);
  
-  //Set bitmap
-  bitmap_layer_set_bitmap(layer, bitmap);
+//   //Set bitmap
+//   bitmap_layer_set_bitmap(layer, bitmap);
  
   //Add to window
-  layer_add_child(window_get_root_layer(window), (Layer*) layer);
-}
+  //layer_add_child(window_get_root_layer(window), (Layer*) layer);
+//}
 
 /**
   * Destory an animation to conserve memory
   * Source: https://github.com/fuzzie360/pebble-noms/blob/master/src/noms.c
   */
-void destroy_property_animation(PropertyAnimation *prop_animation) {
-  if (prop_animation == NULL) {
-    return;
-  }
+// void destroy_property_animation(PropertyAnimation *prop_animation) {
+//   if (prop_animation == NULL) {
+//     return;
+//   }
 
-  if (animation_is_scheduled((Animation*) prop_animation)) {
-    animation_unschedule((Animation*) prop_animation);
-  }
+//   if (animation_is_scheduled((Animation*) prop_animation)) {
+//     animation_unschedule((Animation*) prop_animation);
+//   }
 
-  property_animation_destroy(prop_animation);
-  prop_animation = NULL;
-}
+//   property_animation_destroy(prop_animation);
+//   prop_animation = NULL;
+// }
 
 /**
   * Animation handlers
   */
-void animation_started(Animation *animation, void *data) {
-  (void)animation;
-  (void)data;
-}
+// void animation_started(Animation *animation, void *data) {
+//   (void)animation;
+//   (void)data;
+// }
 
-void animation_stopped(Animation *animation, void *data) {
-  (void)data;
+// void animation_stopped(Animation *animation, void *data) {
+//   (void)data;
 
-  //Teardown
-  destroy_property_animation((PropertyAnimation*) animation);
+//   //Teardown
+//   destroy_property_animation((PropertyAnimation*) animation);
 
-  //SPECIAL CASE DO NOT COPY!
-  animateLayer(trainAnimation, (Layer*) bitmap_layer_get_layer(trainLayer), GRect(144, 49, 154, 34), GRect(-154, 49, 154, 34), 5000, 0);
-}
+//   //SPECIAL CASE DO NOT COPY!
+//   animateLayer(trainAnimation, (Layer*) bitmap_layer_get_layer(trainLayer), GRect(144, 49, 154, 34), GRect(-154, 49, 154, 34), 5000, 0);
+// }
 
-/**
-  * Function to linearly animate any layer between two GRects
-  */
-void animateLayer(PropertyAnimation *animation, Layer *input, GRect startLocation, GRect finishLocation, int duration, int delay) 
-{
-  animation = property_animation_create_layer_frame(input, &startLocation, &finishLocation);
-  animation_set_duration((Animation*) animation, duration);
-  animation_set_delay((Animation*) animation, delay);
-  animation_set_curve((Animation*) animation, AnimationCurveLinear);
-  animation_set_handlers((Animation*) animation, (AnimationHandlers) {
-    .started = (AnimationStartedHandler) animation_started,
-    .stopped = (AnimationStoppedHandler) animation_stopped
-  }, 0);
-  while(!animation_is_scheduled((Animation*) animation)) 
-  {
-    animation_schedule((Animation*) animation);
-  }
-}
 
-/*
- * Turn an AppMessageResult into a readable reason on console
- */
-void interpret_message_result(AppMessageResult app_message_error)
-{
-  if(app_message_error == APP_MSG_OK)
-  {
-    applog("APP_MSG_OK");
-  } 
-
-  else if(app_message_error == APP_MSG_SEND_TIMEOUT)
-  {
-    applog("APP_MSG_SEND_TIMEOUT");
-  } 
-
-  else if(app_message_error == APP_MSG_SEND_REJECTED)
-  {
-    applog("APP_MSG_SEND_REJECTED");
-  }
-
-  else if(app_message_error == APP_MSG_NOT_CONNECTED)
-  {
-    applog("APP_MSG_NOT_CONNECTED");
-  }
-
-  else if(app_message_error == APP_MSG_APP_NOT_RUNNING)
-  {
-    applog("APP_MSG_APP_NOT_RUNNING");
-  }
-
-  else if(app_message_error == APP_MSG_INVALID_ARGS)
-  {
-    applog("APP_MSG_INVALID_ARGS");
-  }
-
-  else if(app_message_error == APP_MSG_BUSY)
-  {
-    applog("APP_MSG_BUSY");
-  }
-
-  else if(app_message_error == APP_MSG_BUFFER_OVERFLOW)
-  {
-    applog("APP_MSG_BUFFER_OVERFLOW");
-  }
-
-  else if(app_message_error == APP_MSG_ALREADY_RELEASED)
-  {
-    applog("APP_MSG_ALREADY_RELEASED");
-  }
-
-  else if(app_message_error == APP_MSG_CALLBACK_ALREADY_REGISTERED)
-  {
-    applog("APP_MSG_CALLBACK_ALREADY_REGISTERED");
-  }
-
-  else if(app_message_error == APP_MSG_CALLBACK_NOT_REGISTERED)
-  {
-    applog("APP_MSG_CALLBACK_NOT_REGISTERED");
-  }
-
-  else if(app_message_error == APP_MSG_OUT_OF_MEMORY)
-  {
-    applog("APP_MSG_OUT_OF_MEMORY");
-  }
-}
