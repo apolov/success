@@ -21,7 +21,7 @@ char question_buffer[64], op1_buffer[32], op2_buffer[32], op3_buffer[32];
 //Prototypes
 void applog(char* message);
 void breakpoint();
-void send_int(int key, int msg);
+void send_int(uint8_t key, uint8_t msg);
 void setup_app_message();
 void remove_all_layers();
 void set_fsm_state(int new_state);
@@ -86,7 +86,6 @@ void in_dropped_handler(AppMessageResult reason, void *context)
   //Get reason
   interpret_message_result(reason);
 }
-
 /************************************ Menu Layer callbacks *******************************************/
 
 /*
@@ -265,10 +264,10 @@ int main(void)
 /*
  * Convenience to log a message without respect to the level or line number
  */
-// void applog(char* message)
-// {
-//   app_log(APP_LOG_LEVEL_INFO, "main.c", 0, message);
-// }
+ void applog(char* message)
+{
+  app_log(APP_LOG_LEVEL_INFO, "success", 0, message);
+}
 
 
 //  * Convenience marker for debugging function progress
@@ -444,5 +443,67 @@ void remove_all_layers()
 //   //SPECIAL CASE DO NOT COPY!
 //   animateLayer(trainAnimation, (Layer*) bitmap_layer_get_layer(trainLayer), GRect(144, 49, 154, 34), GRect(-154, 49, 154, 34), 5000, 0);
 // }
+void interpret_message_result(AppMessageResult app_message_error)
+{
+  if(app_message_error == APP_MSG_OK)
+  {
+    applog("APP_MSG_OK");
+  } 
+
+  else if(app_message_error == APP_MSG_SEND_TIMEOUT)
+  {
+    applog("APP_MSG_SEND_TIMEOUT");
+  } 
+
+  else if(app_message_error == APP_MSG_SEND_REJECTED)
+  {
+    applog("APP_MSG_SEND_REJECTED");
+  }
+
+  else if(app_message_error == APP_MSG_NOT_CONNECTED)
+  {
+    applog("APP_MSG_NOT_CONNECTED");
+  }
+
+  else if(app_message_error == APP_MSG_APP_NOT_RUNNING)
+  {
+    applog("APP_MSG_APP_NOT_RUNNING");
+  }
+
+  else if(app_message_error == APP_MSG_INVALID_ARGS)
+  {
+    applog("APP_MSG_INVALID_ARGS");
+  }
+
+  else if(app_message_error == APP_MSG_BUSY)
+  {
+    applog("APP_MSG_BUSY");
+  }
+
+  else if(app_message_error == APP_MSG_BUFFER_OVERFLOW)
+  {
+    applog("APP_MSG_BUFFER_OVERFLOW");
+  }
+
+  else if(app_message_error == APP_MSG_ALREADY_RELEASED)
+  {
+    applog("APP_MSG_ALREADY_RELEASED");
+  }
+
+  else if(app_message_error == APP_MSG_CALLBACK_ALREADY_REGISTERED)
+  {
+    applog("APP_MSG_CALLBACK_ALREADY_REGISTERED");
+  }
+
+  else if(app_message_error == APP_MSG_CALLBACK_NOT_REGISTERED)
+  {
+    applog("APP_MSG_CALLBACK_NOT_REGISTERED");
+  }
+
+  else if(app_message_error == APP_MSG_OUT_OF_MEMORY)
+  {
+    applog("APP_MSG_OUT_OF_MEMORY");
+  }
+}
 
 
