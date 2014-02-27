@@ -200,6 +200,16 @@ static void window_load(Window *window)
   menuLayer = menu_layer_create(GRect(0, 0, 144, 168 - APP_TITLE_HEIGHT));
 
   //Adding to window is done in set_fsm_state()
+
+  menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
+            .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
+       .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
+       .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
+     });
+  layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
+    vibes_short_pulse();
+
+  menu_layer_set_click_config_onto_window(menuLayer, window);  
 }
 
 static void window_unload(Window *window) 
@@ -266,7 +276,7 @@ int main(void)
  */
  void applog(char* message)
 {
-  app_log(APP_LOG_LEVEL_INFO, "success", 0, message);
+  app_log(APP_LOG_LEVEL_INFO, "success.c", 0, message);
 }
 
 
@@ -371,17 +381,17 @@ void remove_all_layers()
 //     //Prepare window
 //     window_set_background_color(window, GColorWhite);
 
-//     //Setup menu layer
-//     menu_layer_set_click_config_onto_window(menuLayer, window);
-//     menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
-//       .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
-//       .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
-//       .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
-//     });
+      //Setup menu layer
+     //menu_layer_set_click_config_onto_window(menuLayer, window);
+     // menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
+     //        .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
+     //   .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
+     //   .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
+     // });
 
-//     layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
-//     vibes_short_pulse();
-//     break;
+     //layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
+     //vibes_short_pulse();
+     //break;
 //   //Some error state - unused
 //   case STATE_ERROR:
 //     set_image(backLayer, back, GRect(0, 0, 144, 144));
