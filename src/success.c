@@ -63,7 +63,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
 
   //Get string value, if present
     char string_value[32];
-    strcpy(string_value, tuple->value->cstring);
+    strcpy(string_value, t->value->cstring);
     //text_layer_set_text(outputLayer, t->value->cstring);
   
   }
@@ -80,7 +80,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
 
   //Get string value, if present
     char string_value[32];
-    strcpy(string_value, tuple->value->cstring); 
+    strcpy(string_value, t->value->cstring); 
     //text_layer_set_text(outputLayer, t->value->cstring);
   }
   //New FSM state?
