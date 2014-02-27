@@ -53,24 +53,36 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
  */
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
-  Tuple *t = dict_read_first(iter);
-  if(t) 
+  Tuple *tuple = dict_find(iter, OUTPUT);
+  if(tuple) 
   {
-    //;
-    int key = t->key;
+    int key = tuple->key;
 
   //Get integer value, if present
-    int value = t->value->int32;
+    int value = tuple->value->int32;
 
   //Get string value, if present
     char string_value[32];
-    strcpy(string_value, t->value->cstring);
-    //text_layer_set_text(outputLayer, tuple->value->cstring);
-
+    //strcpy(string_value, tuple->value->cstring);
+    text_layer_set_text(outputLayer, tuple->value->cstring);
+  
   }
+   
+    //text_layer_set_text(outputLayer, tuple->value->cstring);
+  while (tuple !=NULL)
+    tuple=dict_read_next(iter);
+  if(tuple)
+  {
+    int key = tuple->key;
 
+  //Get integer value, if present
+    int value = tuple->value->int32;
 
-
+  //Get string value, if present
+    char string_value[32];
+    //strcpy(string_value, tuple->value->cstring); 
+    text_layer_set_text(outputLayer, tuple->value->cstring);
+  }
   //New FSM state?
   /*tuple = dict_find(iter, STATE);
   if(tuple)
