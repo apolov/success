@@ -6,9 +6,9 @@
       "KEY_OP2" : 2,
       "KEY_OP3" : 3
 },
-  "shortName": "success",
-  "longName": "success",
-  "companyName": "MakeAwesomeHappen",
+  "shortName": "SocialTvapp",
+  "longName": "SocialTvapp",
+  "companyName": "AntonioVillavicencio",
   "versionCode": 1,
   "versionLabel": "1.0.0",
   "watchapp": {

@@ -4,8 +4,8 @@
 #define KEY_OP1 1
 #define KEY_OP2 2
 #define KEY_OP3 3
-#define OUTPUT 15
-#define APP_TITLE_HEIGHT 16
+#define OUTPUT 5
+#define APP_TITLE_HEIGHT 6
 //Keys for all the lines
 #define TOTAL_LINES 4
 
@@ -21,10 +21,10 @@ char question_buffer[64], op1_buffer[32], op2_buffer[32], op3_buffer[32];
 //Prototypes
 void applog(char* message);
 void breakpoint();
-void send_int(uint8_t key, uint8_t msg);
+void send_int(int key, int msg);
 void setup_app_message();
 void remove_all_layers();
-void set_fsm_state(int new_state);
+//void set_fsm_state(int new_state);
 void set_image(BitmapLayer *layer, GBitmap *bitmap, GRect frame);
 void destroy_property_animation(PropertyAnimation *prop_animation);
 void animateLayer(PropertyAnimation *animation, Layer *input, GRect startLocation, GRect finishLocation, int duration, int delay);
@@ -97,13 +97,13 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
   switch (cell_index->row) 
     {
   case KEY_OP1:
-    menu_cell_basic_draw(ctx, cell_layer, "option 1", op1_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Option 1", op1_buffer, NULL);
     break;
   case KEY_OP2:
-    menu_cell_basic_draw(ctx, cell_layer, "option 2", op2_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Option 2", op2_buffer, NULL);
     break;
   case KEY_OP3:
-    menu_cell_basic_draw(ctx, cell_layer, "option 3", op3_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Option 3", op3_buffer, NULL);
     break;
   default:
       menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
@@ -134,16 +134,16 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
   }
 }*/
 
-void send_int(uint8_t key, uint8_t cmd)
+/*void send_int(uint8_t key, uint8_t msg)
 {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
   
-  Tuplet value = TupletInteger(key, cmd);
+  Tuplet value = TupletInteger(key, msg);
   dict_write_tuplet(iter, &value);
   
   app_message_outbox_send();
-}
+}*/
 /*
  * Get the number of rows in the MenuLayer
  */
@@ -201,13 +201,16 @@ static void window_load(Window *window)
 
   //Adding to window is done in set_fsm_state()
 
+  window_set_background_color(window, GColorWhite);
+
   menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
-            .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
+       .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
        .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
        .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
      });
+
   layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
-    vibes_short_pulse();
+    //vibes_short_pulse();
 
   menu_layer_set_click_config_onto_window(menuLayer, window);  
 }
@@ -290,7 +293,7 @@ int main(void)
 /*
  * Send an integer
  */
-/*void send_int(int key, int msg) 
+void send_int(int key, int msg) 
 {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
@@ -299,7 +302,7 @@ int main(void)
   dict_write_tuplet(iter, &value);
 
   app_message_outbox_send();
-}*/
+}
 
 /*
  * Ronseal Wood Varnish
