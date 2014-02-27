@@ -56,8 +56,20 @@ void in_received_handler(DictionaryIterator *iter, void *context)
   Tuple *tuple = dict_find(iter, OUTPUT);
   if(tuple) 
   {
-    text_layer_set_text(outputLayer, tuple->value->cstring);
+    //;
+    int key = tuple->key;
+
+  //Get integer value, if present
+    int value = tuple->value->int32;
+
+  //Get string value, if present
+    char string_value[32];
+    strcpy(string_value, tuple->value->cstring);
+    //text_layer_set_text(outputLayer, tuple->value->cstring);
+
   }
+
+
 
   //New FSM state?
   /*tuple = dict_find(iter, STATE);
@@ -91,6 +103,19 @@ void in_dropped_handler(AppMessageResult reason, void *context)
 /*
  * Draw a MenuLayer row
  */
+/*
+   void process_tuple(Tuple *t)
+{
+  //Get key
+  int key = t->key;
+
+  //Get integer value, if present
+  int value = t->value->int32;
+
+  //Get string value, if present
+  char string_value[32];
+  strcpy(string_value, t->value->cstring);
+}*/
 
 void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
   {
