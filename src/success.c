@@ -6,6 +6,7 @@
 #define KEY_OP3 3
 #define OUTPUT 5
 #define APP_TITLE_HEIGHT 6
+
 //Keys for all the lines
 #define TOTAL_LINES 4
 
@@ -13,8 +14,6 @@
 static Window *window;
 static TextLayer *outputLayer;
 static MenuLayer *menuLayer;
-//static PropertyAnimation *trainAnimation;
-//static int current_state;
 static char line_status[TOTAL_LINES][32];
 char question_buffer[64], op1_buffer[32], op2_buffer[32], op3_buffer[32];
 
@@ -25,9 +24,6 @@ void send_int(int key, int msg);
 void setup_app_message();
 void remove_all_layers();
 //void set_fsm_state(int new_state);
-void set_image(BitmapLayer *layer, GBitmap *bitmap, GRect frame);
-void destroy_property_animation(PropertyAnimation *prop_animation);
-void animateLayer(PropertyAnimation *animation, Layer *input, GRect startLocation, GRect finishLocation, int duration, int delay);
 void interpret_message_result(AppMessageResult app_message_error);
 
 /****************************** App Message callbacks ***************************************/
@@ -59,13 +55,35 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     int key = t->key;
 
   //Get integer value, if present
-    int value = t->value->int32;
+  int value = t->value->int32;
 
   //Get string value, if present
     char string_value[32];
     strcpy(string_value, t->value->cstring);
     //text_layer_set_text(outputLayer, t->value->cstring);
-  
+
+    switch(key) {
+    case KEY_QUESTION:
+      //Location received
+      snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
+      draw_row_handler((char*) &question_buffer);
+      break;
+    case KEY_OP1:
+      //op1 received
+      snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
+      draw_row_handler(cell_layer, (char*) &op1_buffer);
+      break;
+      case KEY_OP2:
+      //op2 received
+      snprintf(op2_buffer, sizeof("OP2: couldbelong"), "OP2: %s", string_value);
+     
+      break;
+       case KEY_OP3:
+      //op3 received received
+      snprintf(op3_buffer, sizeof("OP3: couldbelong"), "OP3: %s", string_value);
+      //text_layer_set_text(op3_layer, (char*) &op3_buffer);
+      break;
+    }
   }
    
     //text_layer_set_text(outputLayer, tuple->value->cstring);
@@ -77,28 +95,36 @@ void in_received_handler(DictionaryIterator *iter, void *context)
 
   //Get integer value, if present
     int value = t->value->int32;
-
   //Get string value, if present
     char string_value[32];
     strcpy(string_value, t->value->cstring); 
     //text_layer_set_text(outputLayer, t->value->cstring);
-  }
-  //New FSM state?
-  /*tuple = dict_find(iter, STATE);
-  if(tuple)
-  {
-    set_fsm_state(tuple->value->int32);
-  }*/
 
-  //Line info?
-  /*for(int i = 0; i < TOTAL_LINES; i++)
-  {
-    tuple = dict_find(iter, i);
-    if(tuple)
-    {
-      strcpy(line_status[i], tuple->value->cstring);
-    }
-  }*/
+    switch(key) {
+    case KEY_QUESTION:
+      //Location received
+      snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
+      draw_row_handler((char*) &question_buffer);
+      //text_layer_set_text(question_layer, (char*) &question_buffer);
+      break;
+    case KEY_OP1:
+      //Temperature received
+      snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
+      //text_layer_set_text(op1_layer, (char*) &op1_buffer);
+      draw_row_handler(cell_layer, (char*) &op1_buffer);
+      break;
+      case KEY_OP2:
+      //Temperature received
+      snprintf(op2_buffer, sizeof("OP2: couldbelong"), "OP2: %s", string_value);
+      //text_layer_set_text(op2_layer, (char*) &op2_buffer);
+      break;
+       case KEY_OP3:
+      //Temperature received
+      snprintf(op3_buffer, sizeof("OP3: couldbelong"), "OP3: %s", string_value);
+      //text_layer_set_text(op3_layer, (char*) &op3_buffer);
+      break;
+              }
+  }
 }
 /*
  * In dropped handler
@@ -111,7 +137,6 @@ void in_dropped_handler(AppMessageResult reason, void *context)
   interpret_message_result(reason);
 }
 /************************************ Menu Layer callbacks *******************************************/
-
 /*
  * Draw a MenuLayer row
  */
@@ -140,15 +165,13 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     menu_cell_basic_draw(ctx, cell_layer, "Option 2", op2_buffer, NULL);
     break;
   case KEY_OP3:
-    menu_cell_basic_draw(ctx, cell_layer, "Option 3", op3_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Option 3", (char*) &op3_buffer, NULL);
     break;
   default:
       menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
     break;
     } 
   }
-
-
 /*static void in_received_handler(DictionaryIterator *iter, void *context) 
 {
   (void) context;

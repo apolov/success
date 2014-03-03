@@ -7,7 +7,7 @@ function HTTPGET(url) {
 
 var getOptions = function() {
 	//Get info
-	var response = HTTPGET("http://172.20.87.1:8000/apiquestions/1/?format=json");
+	var response = HTTPGET("http://172.20.64.21:8000/apiquestions/1/?format=json");
 		
 	//Convert to JSON
 	var json = JSON.parse(response);
