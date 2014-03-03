@@ -30,16 +30,13 @@ void interpret_message_result(AppMessageResult app_message_error);
 
 void out_sent_handler(DictionaryIterator *sent, void *context) 
 {
-
 }
-
 /*
  * Out failed handler
  */
 void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) 
 {
   applog("PEBBLE: out_failed_handler");
-
   //Get reason
   interpret_message_result(reason);
 }
@@ -49,13 +46,13 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
  */
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
-  Tuple *t = dict_read_first(iter);
-  if(t) 
+   Tuple *t = dict_read_first(iter);
+   if(t) 
   {
     int key = t->key;
 
   //Get integer value, if present
-  int value = t->value->int32;
+    int value = t->value->int32;
 
   //Get string value, if present
     char string_value[32];
@@ -66,7 +63,44 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_QUESTION:
       //Location received
       snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
-      draw_row_handler((char*) &question_buffer);
+      , (char*) &question_buffer);
+      break;
+    case KEY_OP1:
+      //op1 received
+      snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
+      draw_row_handler(cell_layer, (char*) &op1_buffer);
+      break;
+      case KEY_OP2:
+      //op2 received
+      snprintf(op2_buffer, sizeof("OP2: couldbelong"), "OP2: %s", string_value);
+     
+      break;
+       case KEY_OP3:
+      //op3 received received
+      snprintf(op3_buffer, sizeof("OP3: couldbelong"), "OP3: %s", string_value);
+      //text_layer_set_text(op3_layer, (char*) &op3_buffer);
+      break;
+      }
+    }
+    while (t !=NULL)
+    t=dict_read_next(iter);
+  if(t)
+  {
+    int key = t->key;
+
+  //Get integer value, if present
+    int value = t->value->int32;
+
+  //Get string value, if present
+    char string_value[32];
+    strcpy(string_value, t->value->cstring); 
+    //text_layer_set_text(outputLayer, t->value->cstring);
+
+ switch(key) {
+    case KEY_QUESTION:
+      //Location received
+      snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
+      , (char*) &question_buffer);
       break;
     case KEY_OP1:
       //op1 received
@@ -85,47 +119,8 @@ void in_received_handler(DictionaryIterator *iter, void *context)
       break;
     }
   }
-   
-    //text_layer_set_text(outputLayer, tuple->value->cstring);
-  while (t !=NULL)
-    t=dict_read_next(iter);
-  if(t)
-  {
-    int key = t->key;
+}  
 
-  //Get integer value, if present
-    int value = t->value->int32;
-  //Get string value, if present
-    char string_value[32];
-    strcpy(string_value, t->value->cstring); 
-    //text_layer_set_text(outputLayer, t->value->cstring);
-
-    switch(key) {
-    case KEY_QUESTION:
-      //Location received
-      snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
-      draw_row_handler((char*) &question_buffer);
-      //text_layer_set_text(question_layer, (char*) &question_buffer);
-      break;
-    case KEY_OP1:
-      //Temperature received
-      snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
-      //text_layer_set_text(op1_layer, (char*) &op1_buffer);
-      draw_row_handler(cell_layer, (char*) &op1_buffer);
-      break;
-      case KEY_OP2:
-      //Temperature received
-      snprintf(op2_buffer, sizeof("OP2: couldbelong"), "OP2: %s", string_value);
-      //text_layer_set_text(op2_layer, (char*) &op2_buffer);
-      break;
-       case KEY_OP3:
-      //Temperature received
-      snprintf(op3_buffer, sizeof("OP3: couldbelong"), "OP3: %s", string_value);
-      //text_layer_set_text(op3_layer, (char*) &op3_buffer);
-      break;
-              }
-  }
-}
 /*
  * In dropped handler
  */
@@ -160,7 +155,7 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     {
   case KEY_OP1:
     menu_cell_basic_draw(ctx, cell_layer, "Option 1", op1_buffer, NULL);
-    break;
+  //  break;
   case KEY_OP2:
     menu_cell_basic_draw(ctx, cell_layer, "Option 2", op2_buffer, NULL);
     break;
