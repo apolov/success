@@ -63,12 +63,12 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_QUESTION:
       //Location received
       snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
-      , (char*) &question_buffer);
+      //, (char*) &question_buffer);
       break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
-      draw_row_handler(cell_layer, (char*) &op1_buffer);
+      //draw_row_handler(cell_layer, (char*) &op1_buffer);
       break;
       case KEY_OP2:
       //op2 received
@@ -100,12 +100,12 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_QUESTION:
       //Location received
       snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
-      , (char*) &question_buffer);
+      //, (char*) &question_buffer);
       break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
-      draw_row_handler(cell_layer, (char*) &op1_buffer);
+      //draw_row_handler(cell_layer, (char*) &op1_buffer);
       break;
       case KEY_OP2:
       //op2 received
