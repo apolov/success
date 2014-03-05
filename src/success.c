@@ -78,7 +78,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_OP3:
       //op3 received received
       snprintf(op3_buffer, sizeof("couldbelongname"), "%s", string_value);
-      //text_layer_set_text(op3_layer, (char*) &op3_buffer);
+      
       break;
       }
     }
@@ -113,7 +113,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_OP3:
       //op3 received received
       snprintf(op3_buffer, sizeof("couldbelong"), "%s", string_value);
-      //text_layer_set_text(op3_layer, (char*) &op3_buffer);
+      
       break;
     }
   }
