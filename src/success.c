@@ -14,7 +14,7 @@
 static Window *window;
 static TextLayer *outputLayer;
 static MenuLayer *menuLayer;
-static char line_status[TOTAL_LINES][32];
+//static char line_status[TOTAL_LINES][32];
 char question_buffer[64], op1_buffer[32], op2_buffer[32], op3_buffer[32];
 
 //Prototypes
@@ -112,7 +112,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
       break;
     case KEY_OP3:
       //op3 received received
-      snprintf(op3_buffer, sizeof("couldbelong"), "%s", string_value);
+      snprintf(op3_buffer, sizeof("couldbelongname"), "%s", string_value);
       break;
     }
   }
