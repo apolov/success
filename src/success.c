@@ -7,7 +7,7 @@
 #define OUTPUT 5
 #define APP_TITLE_HEIGHT 6
 
-//Keys for all the lines
+///Keys for all the lines
 #define TOTAL_LINES 4
 
 //Global structures
