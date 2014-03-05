@@ -63,12 +63,12 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_QUESTION:
       //Location received
       snprintf(question_buffer, sizeof("Q: couldbelongname"), "Q: %s", string_value);
-      //, (char*) &question_buffer);
+      
       break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("OP1: couldbelongname"), "OP1: %s", string_value);
-      //draw_row_handler(cell_layer, (char*) &op1_buffer);
+    
       break;
     case KEY_OP2:
       //op2 received
@@ -101,12 +101,10 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_QUESTION:
       //Location received
       snprintf(question_buffer, sizeof("Q: couldbelongname"), "Q: %s", string_value);
-      //, (char*) &question_buffer);
       break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("OP1: couldbelongname"), "OP1: %s", string_value);
-      //draw_row_handler(cell_layer, (char*) &op1_buffer);
       break;
     case KEY_OP2:
       //op2 received
@@ -138,8 +136,8 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
   switch (cell_index->row) 
     {
   case KEY_OP1:
-    menu_cell_basic_draw(ctx, cell_layer, "*** ", op1_buffer, NULL);
-  //  break;
+    menu_cell_basic_draw(ctx, cell_layer, "Option 1 ", op1_buffer, NULL);
+    break;
   case KEY_OP2:
     menu_cell_basic_draw(ctx, cell_layer, "Option 2", op2_buffer, NULL);
     break;
@@ -147,7 +145,7 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     menu_cell_basic_draw(ctx, cell_layer, "Option 3", (char*) &op3_buffer, NULL);
     break;
   default:
-      menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
     break;
     } 
   }
