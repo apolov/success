@@ -47,8 +47,10 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
   (void) context;
+
+  //Get data
   Tuple *t = dict_read_first(iter);
-   if(t) 
+  if(t) 
   {
     int key = t->key;
 
@@ -84,11 +86,11 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     }
   }    
     while (t !=NULL)
-  {    
+    {    
           t=dict_read_next(iter);
   
       if(t)
-    {
+      {
     int key = t->key;
 
   //Get integer value, if present
@@ -99,15 +101,15 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     strcpy(string_value, t->value->cstring); 
     //text_layer_set_text(outputLayer, t->value->cstring);
 
- switch(key) 
-      {
+        switch(key) 
+        {
     //case KEY_QUESTION:
       //Location received
       //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
       //break;
     case KEY_OP1:
       //op1 received
-      snprintf(op1_buffer, sizeof("couldbelongname"), "%s", string_value);
+     snprintf(op1_buffer, sizeof("couldbelongname"), "%s", string_value);
       break;
     case KEY_OP2:
       //op2 received
@@ -117,9 +119,9 @@ void in_received_handler(DictionaryIterator *iter, void *context)
       //op3 received received
       snprintf(op3_buffer, sizeof("couldbelongname"), "%s", string_value);
       break;
+        }
       }
     }
-  }
 }  
 
 /*
@@ -135,7 +137,7 @@ void in_dropped_handler(AppMessageResult reason, void *context)
 /************************************ Menu Layer callbacks *******************************************/
 
 void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
-  {
+{
   switch (cell_index->row) 
     {
   case KEY_OP1:
@@ -151,7 +153,7 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
     break;
     } 
-  }
+}
 
 /*
  * Get the number of rows in the MenuLayer
