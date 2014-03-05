@@ -46,6 +46,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
  */
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
+  (void) context;
   Tuple *t = dict_read_first(iter);
    if(t) 
   {
@@ -84,9 +85,9 @@ void in_received_handler(DictionaryIterator *iter, void *context)
   }    
     while (t !=NULL)
   {    
-    t=dict_read_next(iter);
+          t=dict_read_next(iter);
   
-  if(t)
+      if(t)
     {
     int key = t->key;
 
