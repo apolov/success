@@ -62,22 +62,22 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     switch(key) {
     case KEY_QUESTION:
       //Location received
-      snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
+      snprintf(question_buffer, sizeof("Q: couldbelongname"), "Q: %s", string_value);
       //, (char*) &question_buffer);
       break;
     case KEY_OP1:
       //op1 received
-      snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
+      snprintf(op1_buffer, sizeof("OP1: couldberlongname"), "OP1: %s", string_value);
       //draw_row_handler(cell_layer, (char*) &op1_buffer);
       break;
       case KEY_OP2:
       //op2 received
-      snprintf(op2_buffer, sizeof("OP2: couldbelong"), "OP2: %s", string_value);
+      snprintf(op2_buffer, sizeof("OP2: couldbelongname"), "OP2: %s", string_value);
      
       break;
        case KEY_OP3:
       //op3 received received
-      snprintf(op3_buffer, sizeof("OP3: couldbelong"), "OP3: %s", string_value);
+      snprintf(op3_buffer, sizeof("OP3: couldbelongname"), "OP3: %s", string_value);
       //text_layer_set_text(op3_layer, (char*) &op3_buffer);
       break;
       }
