@@ -153,16 +153,6 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     } 
   }
 
-/*void send_int(uint8_t key, uint8_t msg)
-{
-  DictionaryIterator *iter;
-  app_message_outbox_begin(&iter);
-  
-  Tuplet value = TupletInteger(key, msg);
-  dict_write_tuplet(iter, &value);
-  
-  app_message_outbox_send();
-}*/
 /*
  * Get the number of rows in the MenuLayer
  */
