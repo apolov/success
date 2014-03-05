@@ -46,7 +46,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
  */
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
-   Tuple *t = dict_read_first(iter);
+  Tuple *t = dict_read_first(iter);
    if(t) 
   {
     int key = t->key;
@@ -59,11 +59,11 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     strcpy(string_value, t->value->cstring);
     //text_layer_set_text(outputLayer, t->value->cstring);
 
-    switch(key) {
+    switch(key) 
+    {
     //case KEY_QUESTION:
       //Location received
       //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
-      
       //break;
     case KEY_OP1:
       //op1 received
@@ -80,13 +80,14 @@ void in_received_handler(DictionaryIterator *iter, void *context)
       snprintf(op3_buffer, sizeof("couldbelongname"), "%s", string_value);
       
       break;
-      }
     }
+  }    
     while (t !=NULL)
+  {    
     t=dict_read_next(iter);
   
   if(t)
-  {
+    {
     int key = t->key;
 
   //Get integer value, if present
@@ -97,7 +98,8 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     strcpy(string_value, t->value->cstring); 
     //text_layer_set_text(outputLayer, t->value->cstring);
 
- switch(key) {
+ switch(key) 
+      {
     //case KEY_QUESTION:
       //Location received
       //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
@@ -114,6 +116,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
       //op3 received received
       snprintf(op3_buffer, sizeof("couldbelongname"), "%s", string_value);
       break;
+      }
     }
   }
 }  
