@@ -60,11 +60,11 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     //text_layer_set_text(outputLayer, t->value->cstring);
 
     switch(key) {
-    case KEY_QUESTION:
+    //case KEY_QUESTION:
       //Location received
-      snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
+      //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
       
-      break;
+      //break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("couldbelongname"), "%s", string_value);
@@ -98,10 +98,10 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     //text_layer_set_text(outputLayer, t->value->cstring);
 
  switch(key) {
-    case KEY_QUESTION:
+    //case KEY_QUESTION:
       //Location received
-      snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
-      break;
+      //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
+      //break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("couldbelongname"), "%s", string_value);
@@ -113,7 +113,6 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_OP3:
       //op3 received received
       snprintf(op3_buffer, sizeof("couldbelong"), "%s", string_value);
-      
       break;
     }
   }
