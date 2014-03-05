@@ -5,7 +5,7 @@
 #define KEY_OP2 2
 #define KEY_OP3 3
 #define OUTPUT 5
-#define APP_TITLE_HEIGHT 6
+#define APP_TITLE_HEIGHT 11
 
 ///Keys for all the lines
 #define TOTAL_LINES 4
@@ -64,9 +64,9 @@ void in_received_handler(DictionaryIterator *iter, void *context)
 
     switch(key) 
     {
-    //case KEY_QUESTION:
+    case KEY_QUESTION:
       //Location received
-      //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
+      snprintf(question_buffer, sizeof("couldbereallylongname"), "%s", string_value);
       //break;
     case KEY_OP1:
       //op1 received
@@ -103,10 +103,10 @@ void in_received_handler(DictionaryIterator *iter, void *context)
 
         switch(key) 
         {
-    //case KEY_QUESTION:
+    case KEY_QUESTION:
       //Location received
-      //snprintf(question_buffer, sizeof("couldbelongname"), "%s", string_value);
-      //break;
+      snprintf(question_buffer, sizeof("couldbereallylongname"), "%s", string_value);
+      break;
     case KEY_OP1:
       //op1 received
      snprintf(op1_buffer, sizeof("couldbelongname"), "%s", string_value);
@@ -140,14 +140,17 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
 {
   switch (cell_index->row) 
     {
+   case KEY_QUESTION:
+    menu_cell_basic_draw(ctx, cell_layer, "Question", question_buffer, NULL);    
+    break;
   case KEY_OP1:
-    menu_cell_basic_draw(ctx, cell_layer, "Option 1 ", (char*) &op1_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Option 1 ",op1_buffer, NULL);
     break;
   case KEY_OP2:
     menu_cell_basic_draw(ctx, cell_layer, "Option 2", op2_buffer, NULL);
     break;
   case KEY_OP3:
-    menu_cell_basic_draw(ctx, cell_layer, "Option 3", (char*) &op3_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "Option 3", op3_buffer, NULL);
     break;
   default:
     menu_cell_basic_draw(ctx, cell_layer, "Unknown", "This is a bug!", NULL);
