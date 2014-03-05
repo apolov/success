@@ -84,6 +84,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     }
     while (t !=NULL)
     t=dict_read_next(iter);
+  
   if(t)
   {
     int key = t->key;
@@ -99,17 +100,17 @@ void in_received_handler(DictionaryIterator *iter, void *context)
  switch(key) {
     case KEY_QUESTION:
       //Location received
-      snprintf(question_buffer, sizeof("Q: couldbereallylongname"), "Q: %s", string_value);
+      snprintf(question_buffer, sizeof("Q: couldbelongname"), "Q: %s", string_value);
       //, (char*) &question_buffer);
       break;
     case KEY_OP1:
       //op1 received
-      snprintf(op1_buffer, sizeof("OP1: couldbereallylongname"), "OP1: %s", string_value);
+      snprintf(op1_buffer, sizeof("OP1: couldbelongname"), "OP1: %s", string_value);
       //draw_row_handler(cell_layer, (char*) &op1_buffer);
       break;
       case KEY_OP2:
       //op2 received
-      snprintf(op2_buffer, sizeof("OP2: couldbelong"), "OP2: %s", string_value);
+      snprintf(op2_buffer, sizeof("OP2: couldbelongname"), "OP2: %s", string_value);
      
       break;
        case KEY_OP3:
@@ -132,29 +133,13 @@ void in_dropped_handler(AppMessageResult reason, void *context)
   interpret_message_result(reason);
 }
 /************************************ Menu Layer callbacks *******************************************/
-/*
- * Draw a MenuLayer row
- */
-/*
-   void process_tuple(Tuple *t)
-{
-  //Get key
-  int key = t->key;
-
-  //Get integer value, if present
-  int value = t->value->int32;
-
-  //Get string value, if present
-  char string_value[32];
-  strcpy(string_value, t->value->cstring);
-}*/
 
 void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
   {
   switch (cell_index->row) 
     {
   case KEY_OP1:
-    menu_cell_basic_draw(ctx, cell_layer, "Option 1", op1_buffer, NULL);
+    menu_cell_basic_draw(ctx, cell_layer, "*** ", op1_buffer, NULL);
   //  break;
   case KEY_OP2:
     menu_cell_basic_draw(ctx, cell_layer, "Option 2", op2_buffer, NULL);
@@ -167,27 +152,6 @@ void draw_row_handler(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, v
     break;
     } 
   }
-/*static void in_received_handler(DictionaryIterator *iter, void *context) 
-{
-  (void) context;
-  
-  //Get data
-  Tuple *t = dict_read_first(iter);
-  if(t)
-  {
-    process_tuple(t);
-  }
-  
-  //Get next
-  while(t != NULL)
-  {
-    t = dict_read_next(iter);
-    if(t)
-    {
-      process_tuple(t);
-    }
-  }
-}*/
 
 /*void send_int(uint8_t key, uint8_t msg)
 {
