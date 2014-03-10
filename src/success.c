@@ -5,7 +5,7 @@
 #define KEY_OP2 2
 #define KEY_OP3 3
 #define OUTPUT 5
-#define APP_TITLE_HEIGHT 11
+#define APP_TITLE_HEIGHT 12
 
 ///Keys for all the lines
 #define TOTAL_LINES 4
@@ -46,7 +46,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
  */
 void in_received_handler(DictionaryIterator *iter, void *context) 
 {
-  (void) context;
+  //(void) context;
 
   //Get data
   Tuple *t = dict_read_first(iter);
@@ -183,7 +183,19 @@ void up_single_click_handler(ClickRecognizerRef recognizer, Window *window)
 {}
 
 void select_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
-{}
+{
+  //Create an array of ON-OFF-ON etc durations in milliseconds
+  uint32_t segments[] = {100, 200, 500};
+
+  //Create a VibePattern structure with the segments and length of the pattern as fields
+  VibePattern pattern = {
+    .durations = segments,
+    .num_segments = ARRAY_LENGTH(segments),
+  };
+
+  //Trigger the custom pattern to be executed
+  vibes_enqueue_custom_pattern(pattern);
+}
 
 void down_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
 {}
