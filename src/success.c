@@ -29,8 +29,7 @@ void interpret_message_result(AppMessageResult app_message_error);
 /****************************** App Message callbacks ***************************************/
 
 void out_sent_handler(DictionaryIterator *sent, void *context) 
-{
-}
+{}
 /*
  * Out failed handler
  */
@@ -40,7 +39,6 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
   //Get reason
   interpret_message_result(reason);
 }
-
 /*
  * In received handler
  */
@@ -67,21 +65,18 @@ void in_received_handler(DictionaryIterator *iter, void *context)
     case KEY_QUESTION:
       //Location received
       snprintf(question_buffer, sizeof("couldbereallylongname"), "%s", string_value);
-      //break;
+      break;
     case KEY_OP1:
       //op1 received
       snprintf(op1_buffer, sizeof("couldbelongname"), "%s", string_value);
-    
       break;
     case KEY_OP2:
       //op2 received
       snprintf(op2_buffer, sizeof("couldbelongname"), "%s", string_value);
-     
       break;
     case KEY_OP3:
       //op3 received received
       snprintf(op3_buffer, sizeof("couldbelongname"), "%s", string_value);
-      
       break;
     }
   }    
@@ -99,7 +94,6 @@ void in_received_handler(DictionaryIterator *iter, void *context)
   //Get string value, if present
     char string_value[32];
     strcpy(string_value, t->value->cstring); 
-    //text_layer_set_text(outputLayer, t->value->cstring);
 
         switch(key) 
         {
@@ -213,12 +207,6 @@ static void window_load(Window *window)
 {
   window_set_background_color(window, GColorBlack);
 
-  /*//Images
-  back = gbitmap_create_with_resource(RESOURCE_ID_BACK);
-  backLayer = bitmap_layer_create(GRect(0, 0, 144, 144));
-  train = gbitmap_create_with_resource(RESOURCE_ID_TRAIN);
-  trainLayer = bitmap_layer_create(GRect(0, 0, 154, 34));*/
-
   //Output text
   outputLayer = text_layer_create(GRect(0, 90, 144, 30));
   text_layer_set_background_color(outputLayer, GColorClear);
@@ -245,15 +233,8 @@ static void window_load(Window *window)
 
 static void window_unload(Window *window) 
 {
-  /*//Free bitmaps
-  gbitmap_destroy(back);
-  gbitmap_destroy(train);
-
-  //Free their layers
-  bitmap_layer_destroy(backLayer);
-  bitmap_layer_destroy(trainLayer);*/
-
-  //Free tex layer
+ 
+  //Free text layer
   text_layer_destroy(outputLayer);
 
   //Free menu layer
@@ -332,7 +313,6 @@ void send_int(int key, int msg)
 
   app_message_outbox_send();
 }
-
 /*
  * Ronseal Wood Varnish
  */
