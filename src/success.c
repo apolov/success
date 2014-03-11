@@ -310,7 +310,6 @@ void send_int(int key, int msg)
 
   Tuplet value = TupletInteger(key, msg);
   dict_write_tuplet(iter, &value);
-
   app_message_outbox_send();
 }
 /*
