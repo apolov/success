@@ -179,10 +179,10 @@ void select_click_handler(MenuLayer *menu_layer, MenuIndex *cell_index, void *ca
 
 /************************************** Click events *************************************************/
 
-void up_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
+void up_click_handler(ClickRecognizerRef recognizer, void *context) 
 {}
 
-void select_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
+void select_click_handler(ClickRecognizerRef recognizer, void *context) 
 {
   //Create an array of ON-OFF-ON etc durations in milliseconds
   uint32_t segments[] = {100, 200, 500};
@@ -197,12 +197,14 @@ void select_single_click_handler(ClickRecognizerRef recognizer, Window *window)
   vibes_enqueue_custom_pattern(pattern);
 }
 
-void down_single_click_handler(ClickRecognizerRef recognizer, Window *window) 
+void down_click_handler(ClickRecognizerRef recognizer, void *context) 
 {}
 
-void config_provider(Window *window)
+void click_config_provider(void *context) 
 {
-  window_single_click_subscribe(BUTTON_ID_SELECT, (ClickHandler) select_single_click_handler);
+  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
 }
  
 /************************************** Window lifecycle callbacks ***********************************/
@@ -232,7 +234,7 @@ static void window_load(Window *window)
   menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
        .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
        .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
-       .select_click = (MenuLayerSelectCallback) select_single_click_handler //Unused for now
+       .select_click = (MenuLayerSelectCallback) select_click_handler //Unused for now
      });
 
   layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
@@ -279,7 +281,8 @@ static void init(void)
   app_comm_set_sniff_interval(SNIFF_INTERVAL_REDUCED);
 
   //Clicks
-  window_set_click_config_provider(window, (ClickConfigProvider)config_provider);
+  window_set_click_config_provider(window, click_config_provider);
+  //window_set_click_config_provider(window, (ClickConfigProvider)config_provider);
 
   //Show
   window_stack_push(window, true);
