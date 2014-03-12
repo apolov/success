@@ -218,8 +218,11 @@ static void window_load(Window *window)
 
   //Adding to window is done in set_fsm_state()
 
+  //Prepare window
   window_set_background_color(window, GColorWhite);
 
+  //Setup menu layer
+  menu_layer_set_click_config_onto_window(menuLayer, window);
   menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
        .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
        .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
@@ -228,11 +231,9 @@ static void window_load(Window *window)
 
   layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
     //vibes_short_pulse();
-
-  //menu_layer_reload_data (menuLayer); 
  
 
-  menu_layer_set_click_config_onto_window(menuLayer, window);  
+  //menu_layer_set_click_config_onto_window(menuLayer, window);  
 }
 
 static void window_unload(Window *window) 
