@@ -116,6 +116,7 @@ void in_received_handler(DictionaryIterator *iter, void *context)
         }
       }
     }
+    menu_layer_reload_data (menuLayer); 
 }  
 
 /*
@@ -227,6 +228,9 @@ static void window_load(Window *window)
 
   layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
     //vibes_short_pulse();
+
+  //menu_layer_reload_data (menuLayer); 
+ 
 
   menu_layer_set_click_config_onto_window(menuLayer, window);  
 }
