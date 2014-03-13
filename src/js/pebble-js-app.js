@@ -7,7 +7,7 @@ function HTTPGET(url) {
 
 var getOptions = function() {
 	//Get info
-	var response = HTTPGET("http://172.20.64.27:8000/apiquestions/1/?format=json");
+	var response = HTTPGET("http://172.20.64.41:8000/apiquestions/1/?format=json");
 		
 	//Convert to JSON
 	var json = JSON.parse(response);
@@ -26,11 +26,14 @@ var getOptions = function() {
 	
 	//Send data to watch for display
 	Pebble.sendAppMessage(dict);
+
+	console.log("JAVASCRIPT: Sent: " + JSON.stringify(dict));
 };
 
 Pebble.addEventListener("ready",
   function(e) {
 	//App is ready to receive JS messages
+	console.log("JavaScript app ready and running!");
 	getOptions();
   }
 );
