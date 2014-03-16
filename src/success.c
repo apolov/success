@@ -29,7 +29,9 @@ void interpret_message_result(AppMessageResult app_message_error);
 /****************************** App Message callbacks ***************************************/
 
 void out_sent_handler(DictionaryIterator *sent, void *context) 
-{}
+{
+
+}
 /*
  * Out failed handler
  */
@@ -177,20 +179,21 @@ void select_click_handler(MenuLayer *menu_layer, MenuIndex *cell_index, void *ca
 void up_click_handler(ClickRecognizerRef recognizer, void *context) 
 {}
 
-void select_click_handler(ClickRecognizerRef recognizer, void *context) 
-{
-  //Create an array of ON-OFF-ON etc durations in milliseconds
-  uint32_t segments[] = {100, 200, 500};
+//void select_click_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context)
+// void select_click_handler(ClickRecognizerRef recognizer, void *context) 
+// {
+//   //Create an array of ON-OFF-ON etc durations in milliseconds
+//   uint32_t segments[] = {100, 200, 500};
 
-  //Create a VibePattern structure with the segments and length of the pattern as fields
-  VibePattern pattern = {
-    .durations = segments,
-    .num_segments = ARRAY_LENGTH(segments),
-  };
+//   //Create a VibePattern structure with the segments and length of the pattern as fields
+//   VibePattern pattern = {
+//     .durations = segments,
+//     .num_segments = ARRAY_LENGTH(segments),
+//   };
 
-  //Trigger the custom pattern to be executed
-  vibes_enqueue_custom_pattern(pattern);
-}
+//   //Trigger the custom pattern to be executed
+//   vibes_enqueue_custom_pattern(pattern);
+// }
 
 void down_click_handler(ClickRecognizerRef recognizer, void *context) 
 {}
@@ -199,8 +202,54 @@ void click_config_provider(void *context)
 {
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
-  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+  //window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
 }
+
+void select_click_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context)
+{
+  //Get which row
+  int which = cell_index->row;
+  //int string = subtitle;
+
+  //The array that will hold the on/off vibration times
+  uint32_t segments[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  //Build the pattern
+  for(int i = 0; i < which + 1; i++) 
+  {
+    segments[2 * i] = 200;
+    segments[(2 * i) + 1] = 100;
+  }
+
+  //Create a VibePattern data structure
+  VibePattern pattern = {
+    .durations = segments,
+    .num_segments = 16
+  };
+
+  //Do the vibration pattern!
+  vibes_enqueue_custom_pattern(pattern);
+ 
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+     
+    Tuplet value = TupletInteger(key, which);
+    dict_write_tuplet(iter, &value);
+     
+    app_message_outbox_send();
+}
+
+// void my_sent_int(uint8_t key, uint8_t cmd) 
+// {
+//     DictionaryIterator *iter;
+//     app_message_outbox_begin(&iter);
+     
+//     Tuplet value = TupletInteger(key, cmd);
+//     dict_write_tuplet(iter, &value);
+     
+//     app_message_outbox_send();
+// }
+
  
 /************************************** Window lifecycle callbacks ***********************************/
 
@@ -226,7 +275,7 @@ static void window_load(Window *window)
   menu_layer_set_callbacks(menuLayer, NULL, (MenuLayerCallbacks) {
        .draw_row = (MenuLayerDrawRowCallback) draw_row_handler,
        .get_num_rows = (MenuLayerGetNumberOfRowsInSectionsCallback) get_num_rows_handler,
-       .select_click = (MenuLayerSelectCallback) select_click_handler //Unused for now
+       .select_click = (MenuLayerSelectCallback) select_click_callback //Unused for now
      });
 
   layer_add_child(window_get_root_layer(window), (Layer*) menuLayer);
