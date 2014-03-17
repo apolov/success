@@ -4,7 +4,7 @@
 #define KEY_OP1 1
 #define KEY_OP2 2
 #define KEY_OP3 3
-#define OUTPUT 5
+#define SELECTION 5
 #define APP_TITLE_HEIGHT 12
 
 ///Keys for all the lines
@@ -233,7 +233,7 @@ void select_click_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *c
     DictionaryIterator *iter;
     app_message_outbox_begin(&iter);
      
-    Tuplet value = TupletInteger(key, which);
+    Tuplet value = TupletInteger(SELECTION, which);
     dict_write_tuplet(iter, &value);
      
     app_message_outbox_send();

@@ -4,7 +4,8 @@
       "KEY_QUESTION" : 0,
       "KEY_OP1" : 1,
       "KEY_OP2" : 2,
-      "KEY_OP3" : 3
+      "KEY_OP3" : 3,
+      "SELECTION" : 5
 },
   "shortName": "SocialTVapp",
   "longName": "SocialTVapp",

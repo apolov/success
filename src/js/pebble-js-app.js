@@ -7,7 +7,7 @@ function HTTPGET(url) {
 
 var getOptions = function() {
 	//Get info
-	var response = HTTPGET("http://172.20.64.49:8000/apiquestions/1/?format=json");
+	var response = HTTPGET("http://172.20.63.6:8000/apiquestions/1/?format=json");
 		
 	//Convert to JSON
 	var json = JSON.parse(response);
@@ -17,8 +17,6 @@ var getOptions = function() {
 	var op1 = json.options[0];
 	var op2 = json.options[1];
 	var op3 = json.options[2];
-	
-	
 	
 	//Construct a key-value dictionary	
 	var dict = {"KEY_QUESTION" : question, "KEY_OP1": op1, "KEY_OP2": op2, "KEY_OP3": op3};
@@ -44,3 +42,38 @@ Pebble.addEventListener("appmessage",
 	getOptions();
   }
 );
+
+Pebble.addEventListener("appmessage", function(e) {
+  var selection = e.payload;
+  console.log("JAVASCRIPT: Sent: "+ JSON.stringify(e.payload.selection));
+  switch(selection) {
+    case 0:
+      sendSelection("1");
+      break;
+    case 1:
+      sendSelection("2");
+      break;
+    case 2:
+      sendSelection("2");
+      break;
+  }
+});
+
+function sendSelection(sel) {
+  var res;
+  var req = new XMLHttpRequest();
+  req.open('GET', 'http://172.20.63.6:8000/vote'+ selection);
+  req.onload = function(e) {
+    //if(req.responseText === undefined) {
+    //  Pebble.showSimpleNotificationOnPebble("SmartStart", "Error sending command");
+     // sessid = null;
+      //options.username = null;
+      //options.password = null;
+      //options.sessid = null;
+      //return null;
+    //}
+    res = JSON.parse(req.responseText);
+    //respondBack(res.Return.ResponseSummary.StatusCode);
+  }
+  req.send(null);
+}
