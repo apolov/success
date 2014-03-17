@@ -44,17 +44,17 @@ Pebble.addEventListener("appmessage",
 );
 
 Pebble.addEventListener("appmessage", function(e) {
-  var selection = e.payload;
-  console.log("JAVASCRIPT: Sent: "+ JSON.stringify(e.payload.selection));
+  var selection = e.payload.SELECTION;
+  console.log("JAVASCRIPT: Sent: "+ JSON.stringify(e.payload.SELECTION));
   switch(selection) {
-    case 0:
-      sendSelection("1");
-      break;
     case 1:
-      sendSelection("2");
+      sendSelection("1");
       break;
     case 2:
       sendSelection("2");
+      break;
+    case 3:
+      sendSelection("3");
       break;
   }
 });
@@ -62,7 +62,7 @@ Pebble.addEventListener("appmessage", function(e) {
 function sendSelection(sel) {
   var res;
   var req = new XMLHttpRequest();
-  req.open('GET', 'http://172.20.63.6:8000/vote'+ selection);
+  req.open('GET', 'http://172.20.63.6:8000/vote/'+ sel, false);
   req.onload = function(e) {
     //if(req.responseText === undefined) {
     //  Pebble.showSimpleNotificationOnPebble("SmartStart", "Error sending command");
